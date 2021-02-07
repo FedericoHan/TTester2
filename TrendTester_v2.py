@@ -221,24 +221,27 @@ if __name__ == "__main__":
     #if using BBG for data 
     startDate = datetime.datetime(1990, 10, 9) #year month day
     endDate = datetime.datetime(2021,1,22)#datetime.datetime.today()
-    '''
-    usgg10yr = DownloadData_v2.DownloadData('USGG10YR Index', ['PX_OPEN', 'PX_LAST', 'PX_LOW', 'PX_HIGH'],
-     #                             startDate, endDate, 'DAILY', 'blp').get_data_blp_historical(1)
+    
+    
+    data_tens = DownloadData_v2.DownloadData('USGG10YR Index', ['PX_OPEN', 'PX_LAST', 'PX_LOW', 'PX_HIGH'],
+                                 startDate, endDate, 'DAILY', 'blp').get_data_blp_historical(1)
     #instance 
-    tens = FedTrendStudy(symbol = '10ys_yield', bars = usgg10yr,short_window = 1, long_window = 55, price_or_percent = 'price' )      
+    class_tens = FedTrendStudy(symbol = '10ys_yield', bars = data_tens,short_window = 1, long_window = 55, price_or_percent = 'price' )      
     #create df
-    tens_signals = tens.generate_signals()
+    signals_tens = class_tens.generate_signals()
+    historical_trend_synopsis_tens = signals_tens[signals_tens['loop'] != 0]
     
-    historical_trend_synopsis = tens_signals[tens_signals['loop'] != 0]'''
     
-    data_ty = data_ty #= DownloadData_v2.DownloadData('TY1 Comdty', ['PX_OPEN', 'PX_LAST', 'PX_LOW', 'PX_HIGH'],
-         #                         startDate, endDate, 'DAILY', 'blp').get_data_blp_historical(1)
     
+    data_ty = DownloadData_v2.DownloadData('TY1 Comdty', ['PX_OPEN', 'PX_LAST', 'PX_LOW', 'PX_HIGH'],
+                                  startDate, endDate, 'DAILY', 'blp').get_data_blp_historical(1)
     #class isntance 
-    class_ty = FedTrendStudy(symbol = 'ty_futs', bars = data_ty ,short_window = 1, long_window = 55, price_or_percent = 'percent' )    
+    class_ty = FedTrendStudy(symbol = 'ty_futs', bars = data_ty ,short_window = 1, long_window = 55, price_or_percent = 'percent' )
     signals_ty = class_ty.generate_signals()
     
-    historical_trend_synopsis_ty = ty_futs_signals[ty_futs_signals['loop'] != 0 ]
+    historical_trend_synopsis_ty = signals_ty[signals_ty['loop'] != 0 ]
+    cleaned_ty = historical_trend_synopsis_ty[['entry_track', 'trend_length', 'entry_level','loop', 'inten', 'trend_sum']]
+    
     
     data_eurusd=  DownloadData_v2.DownloadData('EURUSD Curncy', ['PX_OPEN', 'PX_LAST', 'PX_LOW', 'PX_HIGH'],
                                   startDate, endDate, 'DAILY', 'blp').get_data_blp_historical(1)
@@ -248,19 +251,16 @@ if __name__ == "__main__":
     signals_eurusd = class_eurusd.generate_signals()
     
     historical_trend_synopsis_eurusd = signals_eurusd[signals_eurusd['loop'] != 0 ]
+    cleaned_eur = historical_trend_synopsis_eur[['entry_track', 'trend_length', 'entry_level','loop', 'inten', 'trend_sum']]
+    
     
     data_usdidr =  DownloadData_v2.DownloadData('USDIDR Curncy', ['PX_OPEN', 'PX_LAST', 'PX_LOW', 'PX_HIGH'],
                                   startDate, endDate, 'DAILY', 'blp').get_data_blp_historical(1)
-    
+
     #class isntance 
     class_usdidr = FedTrendStudy(symbol = 'usdidr', bars = data_usdidr ,short_window = 1, long_window = 55, price_or_percent = 'price' )    
     signals_usdidr = class_usdidr.generate_signals()
     
     historical_trend_synopsis_usdidr = signals_usdidr[signals_usdidr['loop'] != 0 ]
     
-    
-
-    
-    #tens_signals['entry'][long_window:] = np.where(tens_signals['positions'][long_window:] == 2, tens_signals['PX_LAST'][long_window:], 0.0 )
-    #tens_signals['entry'][long_window:] = np.where( tens_signals['positions'][long_window:] == -2, tens_signals['PX_LAST'][long_window:], 0.0 )                                              
     
